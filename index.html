@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<style>
+    body{
+        background-color: rgb(135, 174, 161);
+        text-align: center;
+        background-image: url("https://searchengineland.com/wp-content/seloads/2015/01/future-search-box-ss-1920.jpg");
+        color: white;
+    }
+</style>
+
+<body>
+    <h1><u>Todo App with server</u></h1>
+
+    <form onsubmit="postTodo(); return false">
+        TODO: <input id="todo" type="text" required><br>
+        <button type="submit">Add</button>
+    </form>
+    <button onclick="getAllTodos()">Refresh</button>
+
+    <h3 id="result"> </h3>
+
+    <script>
+        function postTodo() {
+            let todoText = document.querySelector("#todo").value
+
+            axios.post(`https://fine-gold-hare-ring.cyclic.app/todo`, {
+                text: todoText
+            })
+                .then(function (response) {
+                    console.log(response.data);
+
+                    document.querySelector("#result").innerHTML = ""
+
+                    response.data.data.map(eachTodo => {
+                        document.querySelector("#result").innerHTML += eachTodo
+                        document.querySelector("#result").innerHTML += '<br>'
+                    })
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+
+        }
+
+        function getAllTodos() {
+            axios.get(`https://fine-gold-hare-ring.cyclic.app/todos`)
+                .then(function (response) {
+                    console.log(response.data);
+
+                    document.querySelector("#result").innerHTML = ""
+
+                    response.data.data.map(eachTodo => {
+                        document.querySelector("#result").innerHTML += eachTodo
+                        document.querySelector("#result").innerHTML += '<br>'
+                    })
+
+                })
+                .catch(function (error) {
+                    console.log(error);
+                })
+        }
+
+        setInterval(getAllTodos, 1000);
+
+    </script>
+
+
+</body>
+
+</html>
